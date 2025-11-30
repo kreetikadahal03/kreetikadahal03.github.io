@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kritika Dahal | Portfolio</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <style>
+      /* =================================
+           01. CSS STYLES (THEME & DESIGN)
+           ================================= */
+
+      /* General Setup */
+      :root {
+        --color-dark: #10151a; /* Darker, slightly blue-tinted background */
+        --color-medium: #1f2a38;
+        --color-accent: #0077ff; /* Electric Blue Accent */
+        --color-light-accent: #77b3ff; /* Lighter Blue for highlights */
+        --color-text: #e6f0ff; /* Light blue-white text */
+        --color-secondary-text: #aabee0;
+        --font-mono: "Consolas", "Monaco", monospace;
+        --spacing-large: 4rem;
+      }
+
+      /* Global Enhancements */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-mono);
+        background-color: var(--color-dark);
+        color: var(--color-text);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+
+      /* Canvas Background (Matrix Effect) */
+      #matrix-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.1;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      a {
+        color: var(--color-accent);
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      a:hover {
+        color: var(--color-light-accent);
+      }
+
+      /* Header & Navigation */
+      header {
+        background: var(--color-medium);
+        padding: 1rem 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+      }
+
+      header .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        color: var(--color-accent);
+        text-shadow: 0 0 5px var(--color-accent);
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+      }
+
+      .nav-links li {
+        margin-left: 1.5rem;
+      }
+
+      .nav-links a {
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+      }
+
+      /* Section Styling */
+      main section {
+        padding: var(--spacing-large) 0;
+        position: relative;
+      }
+
+      .section-bg {
+        background-color: var(--color-medium);
+      }
+
+      main h2 {
+        color: var(--color-accent);
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--color-accent);
+        padding-bottom: 0.5rem;
+        display: inline-block;
+      }
+
+      /* Hero Section (Parallax base) */
+      #hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        background-attachment: fixed;
+        background-position: center 0;
+        transition: background-position 0.1s linear;
+      }
+
+      .hero-content {
+        padding: 5rem 0;
+      }
+
+      .greeting {
+        color: var(--color-secondary-text);
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .terminal-text {
+        font-size: 3.5rem;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+      }
+
+      /* Terminal Cursor Effect */
+      .terminal-text.typing-done::after {
+        content: "_";
+        display: inline-block;
+        animation: blink 1s step-end infinite;
+        margin-left: 5px;
+        color: var(--color-accent);
+      }
+
+      /* Keyframes for the blinking animation */
+      @keyframes blink {
+        from,
+        to {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      .subheader {
+        font-size: 1.8rem;
+        color: var(--color-accent);
+        text-shadow: 0 0 5px rgba(0, 119, 255, 0.5); /* Blue Shadow */
+        margin-bottom: 1.5rem;
+      }
+
+      .intro-text {
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin-bottom: 2rem;
+      }
+
+      .cta-button {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background-color: var(--color-accent);
+        color: var(--color-dark);
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        box-shadow: 0 0 5px var(--color-accent);
+      }
+
+      .cta-button:hover {
+        background-color: var(--color-light-accent);
+        transform: translateY(-2px);
+        color: var(--color-dark);
+        box-shadow: 0 0 10px var(--color-accent),
+          0 0 20px rgba(0, 119, 255, 0.4);
+      }
+
+      /* Skills Section */
+      .skill-category {
+        margin-bottom: 3rem;
+        padding: 1.5rem;
+        background: rgba(0, 119, 255, 0.05); /* Blue tint */
+        border-left: 3px solid var(--color-accent);
+      }
+
+      .skill-category h3 {
+        color: var(--color-text);
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+      }
+
+      .skill-list {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        padding-left: 0;
+      }
+
+      .skill-list li {
+        background: var(--color-dark);
+        padding: 0.5rem 1rem;
+        border-radius: 3px;
+        border: 1px solid var(--color-secondary-text);
+        font-size: 0.9rem;
+        transition: transform 0.2s, border-color 0.2s;
+        text-align: center;
+      }
+
+      .skill-list li:hover {
+        transform: translateY(-3px);
+        border-color: var(--color-accent);
+      }
+
+      /* Projects Section */
+      .project-card {
+        background: var(--color-dark);
+        border: 1px solid var(--color-medium);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 5px;
+        transition: box-shadow 0.3s, transform 0.3s;
+      }
+
+      .project-card:hover {
+        box-shadow: 0 0 15px rgba(0, 119, 255, 0.2); /* Blue hover shadow */
+        transform: translateY(-5px);
+      }
+
+      .project-card h3 {
+        color: var(--color-accent);
+        margin-bottom: 0.5rem;
+      }
+
+      .project-link {
+        display: inline-block;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+      }
+
+      /* Contact Section */
+      .contact-links {
+        margin-top: 1.5rem;
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .contact-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--color-accent);
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        box-shadow: 0 0 5px var(--color-accent);
+      }
+
+      .contact-link:hover {
+        background-color: var(--color-accent);
+        color: var(--color-dark);
+        box-shadow: 0 0 10px var(--color-accent),
+          0 0 20px rgba(0, 119, 255, 0.4);
+      }
+
+      /* Placeholders */
+      .placeholder-box {
+        background: rgba(255, 255, 0, 0.05);
+        border: 1px dashed yellow;
+        padding: 1rem;
+        margin-top: 2rem;
+        color: yellow;
+        font-style: italic;
+        font-size: 0.9rem;
+      }
+
+      /* Footer */
+      footer {
+        background: var(--color-dark);
+        padding: 1rem 0;
+        text-align: center;
+        border-top: 1px solid var(--color-medium);
+        color: var(--color-secondary-text);
+        font-size: 0.8rem;
+      }
+
+      /* Scroll Animation Visibility Class */
+      section {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+      section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        .hero-content {
+          text-align: center;
+        }
+        .terminal-text {
+          font-size: 2.5rem;
+        }
+        .subheader {
+          font-size: 1.4rem;
+        }
+        .contact-links {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <header>
+      <nav class="container">
+        <h1 class="logo">Kritika Dahal</h1>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="hero" class="hero-section section-bg">
+        <div class="container hero-content">
+          <p class="greeting">Access Granted:</p>
+          <h2 class="terminal-text">I am KRITIKA DAHAL</h2>
+          <h3 class="subheader">Aspiring Cybersecurity Enthusiast</h3>
+          <p class="intro-text">
+            Deeply curious about **System Vulnerabilities**, **Data Integrity**,
+            and **Defensive Architectures**. Currently building foundational
+            knowledge in backend development, database security, and network
+            analysis.
+          </p>
+          <a href="#skills" class="cta-button"
+            >View My Technical Skills <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
+      </section>
+
+      <section id="about" class="about-section">
+        <div class="container">
+          <h2><i class="fas fa-user-secret"></i> About Me</h2>
+          <p>
+            I am a student preparing to pursue a degree in **Computer Science**,
+            driven by a strong interest in the **Cybersecurity domain**. My
+            focus is on understanding how complex systems operate and, more
+            importantly, how to secure them against modern threats. My
+            background in **backend development** and **database management**
+            provides a unique perspective on security vulnerabilities.
+          </p>
+          <div class="placeholder-box">
+            **Future Achievements:** Currently working towards **CompTIA
+            Security+ certification** and building a custom **SIEM-like log
+            analyzer**.
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" class="skills-section section-bg">
+        <div class="container">
+          <h2><i class="fas fa-shield-alt"></i> Core Technical Skills</h2>
+
+          <div class="skill-category">
+            <h3>Foundational Development & Databases</h3>
+            <ul class="skill-list">
+              <li>**Backend:** Python, Node.js (Introductory)</li>
+              <li>
+                **Databases:** SQL (PostgreSQL, MySQL), NoSQL (MongoDB Basics)
+              </li>
+              <li>**Web:** HTML5, CSS3, JavaScript (Vanilla)</li>
+              <li>**OS & CLI:** Linux/Bash Command Line, Windows/PowerShell</li>
+            </ul>
+          </div>
+
+          <div class="skill-category">
+            <h3>Cybersecurity & Analytical Focus</h3>
+            <ul class="skill-list">
+              <li>
+                **Network Security Basics:** TCP/IP, OSI Model, Subnetting
+                Fundamentals
+              </li>
+              <li>
+                **Vulnerability Assessment:** Basic Scanning (e.g., Nmap
+                fundamentals)
+              </li>
+              <li>
+                **Security Tools:** Introductory use of **Wireshark** (packet
+                analysis), **Nmap** (port scanning), **Burp Suite** (web basics)
+              </li>
+              <li>
+                **Encryption Basics:** Hashing (SHA/MD5), Symmetric/Asymmetric
+                Key Concepts
+              </li>
+              <li>
+                **Penetration Testing (Fundamentals):** Reconnaissance, Basic
+                Exploitation Concepts (e.g., Buffer Overflows)
+              </li>
+            </ul>
+          </div>
+
+          <div class="placeholder-box">
+            **Expanding Expertise:** Currently learning **Cryptography
+            Implementation** and deepening skills in **Cloud Security (AWS/Azure
+            Basics)**.
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="projects-section">
+        <div class="container">
+          <h2><i class="fas fa-code-branch"></i> Cybersecurity Projects</h2>
+
+          <div class="project-card">
+            <h3>Project 1: Python/Flask Secure API Gateway</h3>
+            <p>
+              A proof-of-concept **REST API** with robust **Input Sanitization**
+              (preventing injection), utilizing **JWTs** for stateless
+              authentication, and implementing a basic **Rate Limiter** to
+              defend against brute-force attacks.
+            </p>
+            <a href="#" target="_blank" class="project-link"
+              ><i class="fas fa-external-link-alt"></i> View Code/Write-up</a
+            >
+          </div>
+
+          <div class="project-card">
+            <h3>Project 2: Network Traffic Capture and Forensic Analysis</h3>
+            <p>
+              Deep analysis of a **PCAP file** (simulated phishing attempt),
+              focusing on **HTTP/S headers**, **DNS resolution anomalies**, and
+              utilizing Wireshark filters to reconstruct TCP streams and extract
+              **IOCs (Indicators of Compromise)**.
+            </p>
+            <a href="#" target="_blank" class="project-link"
+              ><i class="fas fa-file-alt"></i> Read Report</a
+            >
+          </div>
+
+          <div class="placeholder-box">
+            **Project Ideas in Progress:** **Custom Port Scanner** in Python and
+            a **Basic File Encryption Utility**.
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact-section section-bg">
+        <div class="container">
+          <h2><i class="fas fa-envelope"></i> Get in Touch</h2>
+          <p>
+            I'm always open to discussing new concepts, projects, and
+            opportunities in computer science and cybersecurity. My inbox is
+            secure and monitored!
+          </p>
+          <div class="contact-links">
+            <a href="mailto:kritikad260@gmail.com" class="contact-link"
+              ><i class="fas fa-at"></i> Email Me</a
+            >
+            <a
+              href="https://www.linkedin.com/in/kritikadahal/"
+              target="_blank"
+              class="contact-link"
+              ><i class="fab fa-linkedin"></i> LinkedIn</a
+            >
+            <a
+              href="https://github.com/yourprofile"
+              target="_blank"
+              class="contact-link"
+              ><i class="fab fa-github"></i> GitHub</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>
+          &copy; 2025 Kritika Dahal. Securely designed and developed using HTML,
+          CSS, & Vanilla JS.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      // ===================================
+      // 02. JAVASCRIPT (ANIMATION & EFFECTS)
+      // ===================================
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- 1. Matrix Code Rain Effect (Blue themed) ---
+        const canvas = document.getElementById("matrix-canvas");
+        const ctx = canvas.getContext("2d");
+
+        let width = (canvas.width = window.innerWidth);
+        let height = (canvas.height = window.innerHeight);
+
+        window.onresize = function () {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        };
+
+        const chars =
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@#$%^&*()_+";
+        const font_size = 10;
+        const columns = Math.floor(width / font_size);
+
+        const drops = [];
+        for (let i = 0; i < columns; i++) drops[i] = 1;
+
+        function draw() {
+          ctx.fillStyle = "rgba(16, 21, 26, 0.05)"; /* Dark Blue-Tinted Fade */
+          ctx.fillRect(0, 0, width, height);
+
+          ctx.font = font_size + "px Consolas, Monaco, monospace";
+
+          for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillStyle = "#0077FF"; /* Electric Blue */
+            ctx.fillText(text, i * font_size, drops[i] * font_size);
+
+            if (drops[i] * font_size > height && Math.random() > 0.97) {
+              drops[i] = 0;
+            }
+
+            drops[i]++;
+          }
+        }
+
+        setInterval(draw, 33);
+
+        // --- 2. Typewriter Effect for Hero Text ---
+        const terminalElement = document.querySelector(".terminal-text");
+        const textToType = terminalElement.textContent;
+        terminalElement.textContent = "";
+        let charIndex = 0;
+
+        function typeWriter() {
+          if (charIndex < textToType.length) {
+            terminalElement.textContent += textToType.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeWriter, 70);
+          } else {
+            terminalElement.classList.add("typing-done");
+          }
+        }
+
+        typeWriter();
+
+        // --- 3. Simple Parallax Effect on Hero Section ---
+        const heroSection = document.getElementById("hero");
+
+        window.addEventListener("scroll", () => {
+          const scrolled = window.scrollY;
+          heroSection.style.backgroundPositionY = scrolled * 0.4 + "px";
+        });
+
+        // --- 4. Scroll Animation (Fade In Sections) ---
+        const sections = document.querySelectorAll("section");
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          {
+            threshold: 0.1,
+          }
+        );
+
+        sections.forEach((section) => {
+          observer.observe(section);
+        });
+      });
+    </script>
+  </body>
+</html>
